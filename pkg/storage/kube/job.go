@@ -66,8 +66,10 @@ func (s *store) GetJobLog(job *brigade.Job) (string, error) {
 }
 
 func (s *store) getJobLogStream(follow bool, job *brigade.Job) (io.ReadCloser, error) {
+	tailAllLines := int64(-1)
 	req := s.client.CoreV1().Pods(s.namespace).GetLogs(job.ID, &v1.PodLogOptions{
-		Follow: follow,
+		Follow:    follow,
+		TailLines: &tailAllLines,
 	})
 
 	readCloser, err := req.Stream()

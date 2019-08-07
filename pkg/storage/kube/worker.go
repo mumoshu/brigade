@@ -84,8 +84,10 @@ func (s *store) GetWorkerInitLog(worker *brigade.Worker) (string, error) {
 }
 
 func (s *store) getWorkerLogStream(follow bool, worker *brigade.Worker, container ...string) (io.ReadCloser, error) {
+	tailAllLines := int64(-1)
 	opts := &v1.PodLogOptions{
 		Follow: follow,
+		TailLines: &tailAllLines,
 	}
 	if len(container) > 0 {
 		opts.Container = container[0]
